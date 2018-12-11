@@ -32,3 +32,9 @@ vec3 specular = specularStrength * spec * lightColor;
 把法向量转换到世界空间中，需要注意的是当模型矩阵执行了不等比缩放时，具体见learnoengl光照部分
 解决方法：
 使用一个定制的法线矩阵
+Normal = mat3(transpose(inverse(model))) * aNormal;
+
+3.扩展
+在基础光照上多一点点...
+
+3.1次表面散射
