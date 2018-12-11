@@ -1,4 +1,4 @@
-#重新整理一遍关于光照的知识
+重新整理一遍关于光照的知识
 
 1.首先是颜色：
   我们实际看到的颜色并不是这个物体的真正颜色，而是它所反射的颜色，所以实际上最终的颜色向量是由两个颜色相乘得来的
@@ -21,4 +21,14 @@ float diff = max(dot(norm, lightDir), 0.0);       //点乘，计算光源对当�
 vec3 diffuse = diff * lightColor;                 //最终和光照叠加的影响
 
 2.3镜面光照
+specular highlight，和漫反射一样，计算时要考虑法线方向，但同时还要考虑观察方向（这里选择在世界空间中进行光照计算）
+计算：
+vec3 viewDir = normalize(viewPos - FragPos);                //观察方向，由观察位置减去片段位置
+vec3 reflectDir = reflect(-lightDir, norm);                 //反射方向，由光的入射方向和该点的法向量共同确定
+float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);   //这里除了用点乘计算夹角带来的影响以外，还取32次幂，表示反光度，值越大反射光的能力越大，散射越少
+vec3 specular = specularStrength * spec * lightColor;       
 
+2.3注意事项
+把法向量转换到世界空间中，需要注意的是当模型矩阵执行了不等比缩放时，具体见learnoengl光照部分
+解决方法：
+使用一个定制的法线矩阵
