@@ -38,3 +38,4 @@ Normal = mat3(transpose(inverse(model))) * aNormal;
 在基础光照上多一点点...
 
 3.1次表面散射
+详见brdf
