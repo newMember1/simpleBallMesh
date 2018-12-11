@@ -1,0 +1,24 @@
+#重新整理一遍关于光照的知识
+
+1.首先是颜色：
+  我们实际看到的颜色并不是这个物体的真正颜色，而是它所反射的颜色，所以实际上最终的颜色向量是由两个颜色相乘得来的
+  例如白光定义为 glm::vec3 lightColor(1.0f, 1.0f, 1.0f)
+      玩具颜色定义为glm::vec3 toyColor(1.0f, 0.5f, 0.31f)
+      那么最终结果是glm::vec3 result=lightColor*toyColor
+
+2.光照模型：
+目前常用的是blinn phong lighting model，主要由ambient，diffuse，specular光照组成
+
+2.1环境光照
+一个简化的全局照明模型，用一个很小的常量，添加到片段的最终颜色中
+
+2.2漫反射光照
+diffuse是光线折射入物体后，在内部经过散射，重新穿出表面的光，但是在金属中折射入物体的光子会别完全吸收掉，因此diffuse分量永远为0
+计算：
+vec3 norm = normalize(Normal);                    //法线方向
+vec3 lightDir = normalize(lightPos - FragPos);    //光源减去片段位置，得到入射光的方向
+float diff = max(dot(norm, lightDir), 0.0);       //点乘，计算光源对当前片段实际的漫反射影响
+vec3 diffuse = diff * lightColor;                 //最终和光照叠加的影响
+
+2.3镜面光照
+
